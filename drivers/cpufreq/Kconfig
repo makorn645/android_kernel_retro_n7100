@@ -139,6 +139,10 @@ config CPU_FREQ_DEFAULT_GOV_ZZMOOVE
 	  CPU Hotplug modifications partially taken from ktoonservative governor from
  	  ktoonsez KT747-JB kernel
 
+config CPU_FREQ_DEFAULT_GOV_PEGASUSQPLUS
+	bool "pegasusqplus"
+	select CPU_FREQ_GOV_PEGASUSQPLUS
+	
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -295,6 +299,9 @@ config CPU_FREQ_GOV_SMARTASS2
 		'smartassV2' - a "smart" governor
 		If in doubt, say N.
 
+config CPU_FREQ_GOV_PEGASUSQPLUS
+	tristate "'pegasusqplus' cpufreq policy governor"
+	
 config CPU_FREQ_GOV_ZZMOOVE
 	tristate "'zzmoove' cpufreq governor"
 	depends on CPU_FREQ
