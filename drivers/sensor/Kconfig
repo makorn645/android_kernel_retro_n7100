@@ -384,3 +384,4 @@ config SENSORS_SEC_SHTC1_VER
 	  shtc1 version for temphumid factory test in ssp driver.
           If you give version name here you get shtc1 version for
 	  lcd test.
+
