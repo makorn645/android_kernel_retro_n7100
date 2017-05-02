@@ -250,7 +250,7 @@ static ssize_t store_ignore_nice_load(struct kobject *a, struct attribute *b,
 		//dbs_info->prev_cpu_idle = get_cpu_idle_time(j,
 						//&dbs_info->prev_cpu_wall, 0);
 		if (dbs_tuners_ins.ignore_nice)
-			dbs_info->prev_cpu_nice = kcpustat_cpu(j).cpustat[CPUTIME_NICE];
+			dbs_info->prev_cpu_nice = kstat_cpu(j).cpustat.nice;
 	}
 	return count;
 }
@@ -343,8 +343,8 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 			cputime64_t cur_nice;
 			unsigned long cur_nice_jiffies;
 
-			cur_nice = kcpustat_cpu(j).cpustat[CPUTIME_NICE] -
-					 j_dbs_info->prev_cpu_nice;
+			cur_nice = cputime64_sub(kstat_cpu(j).cpustat.nice,
+					 j_dbs_info->prev_cpu_nice);
 			/*
 			 * Assumption: nice time between sampling periods will
 			 * be less than 2^32 jiffies for 32 bit sys
@@ -352,7 +352,7 @@ static void dbs_check_cpu(struct cpu_dbs_info_s *this_dbs_info)
 			cur_nice_jiffies = (unsigned long)
 					cputime64_to_jiffies64(cur_nice);
 
-			j_dbs_info->prev_cpu_nice = kcpustat_cpu(j).cpustat[CPUTIME_NICE];
+			j_dbs_info->prev_cpu_nice = kstat_cpu(j).cpustat.nice;
 			idle_time += jiffies_to_usecs(cur_nice_jiffies);
 		}
 
@@ -482,7 +482,7 @@ static int cpufreq_governor_dbs(struct cpufreq_policy *policy,
 						//&j_dbs_info->prev_cpu_wall, 0);
 			if (dbs_tuners_ins.ignore_nice) {
 				j_dbs_info->prev_cpu_nice =
-						kcpustat_cpu(j).cpustat[CPUTIME_NICE];
+						kstat_cpu(j).cpustat.nice;
 			}
 		}
 		this_dbs_info->down_skip = 0;
